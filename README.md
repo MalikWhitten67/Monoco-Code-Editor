@@ -83,6 +83,7 @@ my_function()
 
  Frontend:
 * <a href="https://nwjs.io/"> nw.js<a/>
+* <a href="https://www.npmjs.com/package/vrd-router">Vrd SPA Router</a>
 
 Backend:
 * <a href="https://www.npmjs.com/package/compilex">Compilex<a/>
