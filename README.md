@@ -2,12 +2,18 @@
 
 <img  width="70" src="https://user-images.githubusercontent.com/65188863/216860584-2c03afd7-2911-4d29-8e4d-0069d3e698b1.png">
 
+<style>
+body{
+   font-family:sans-serif;
+   font-size:calc(1vw + 10px);
+}
+</style>
 ```
 last edited: 2/5/23
 ```
 
 
-# About:
+#About:
 Monoco is a extensible open source ide - created to be a one stop shop ide with tools that enhance programmers daily tasks.
 
 
@@ -27,7 +33,7 @@ Monoco is built ontop of chromium which aids in the use of html webpage creation
 Monoco can show you in realtime what you are editing - the editor has an event listener that checks if you have edited the text on that file - then rewrite the popup windows html
 
 simple spa project to get you started:
-```html
+```
 <!Doctype html>
 <html>
  <head>
@@ -67,13 +73,14 @@ simple spa project to get you started:
 </html>
 ```
 
-* python 
+* python  - compile python code right from your editor
 
-```python
+```
 def my_function():
   print("Hello Monoco")
 
 my_function()
+
 ```
 
 
@@ -86,6 +93,7 @@ Backend:
 * <a href="https://www.npmjs.com/package/compilex">Compilex<a/>
 * Fs
 * Nodejs
+* <a  href="https://pocketbase.io">Pocketbase</a>
 
 
 
