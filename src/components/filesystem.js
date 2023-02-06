@@ -1,24 +1,22 @@
 var fs = nw.require('fs')
 var path  = nw.require('path')
 var editor = ace.edit("editor");
-var fileexplorer = {
-    create: function (path, name) {
-        fs.writeFileSync(path + '/' + name, '');
-        var element = document.createElement("p");
-        element.innerHTML = `${name}`;
-        element.id = name
-        
-        element.onclick = () =>{
-             
-            fileexplorer.open(path + '/' + name);
-            fs.writeFileSync('./name.txt',path + '/' + name)
-            editor.setValue(fs.readFileSync(path, + '/' + name, 'utf8'));
-           
-        }
-        if(!document.getElementById(name)){
-            document.getElementById("folder").appendChild(element);
-        }
 
+var fileexplorer = {
+    create: function (path) {
+            fs.writeFileSync(path, '')
+            swal.fire({
+                title: 'Success',
+                text: `The file ${path} was created`,
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            })
+
+           
+        
+    
+    
+        
     },
     open: function (path) {
         try {
@@ -62,6 +60,9 @@ var fileexplorer = {
             }else if(path.endsWith('.rs')){
                 editor.session.setMode("ace/mode/rust");
             }
+            else if(path.endsWith('.jsx')){
+                editor.session.setMode("ace/mode/jsx");
+            }
              
             
             editor.setValue(fs.readFileSync(path,'utf8'));
@@ -95,76 +96,144 @@ var fileexplorer = {
                         }
                 
                         files.forEach((file, index) => {
-                            var element = document.createElement("p");
-                            element.innerHTML = `${file}`;
-                            element.id = file
-                            element.setAttribute('path', path + '/' + file)
-                            element.onclick = (event) =>{
-                                fileexplorer.open(path + '/' + file);
-                                fs.writeFileSync('./name.txt',path + '/' + file)
-                              
-                                element.onmouseup = (event) =>{
-                                    if(event.button == 2){
-                                        swal.fire({
-                                            title:"Options",
-                                            html: `<button id="delete" class="swal2-confirm">Delete</button>
-                                            <button id="rename" class="swal2-confirm">rename</button>
-                                            `,
-                                            showConfirmButton: false,
-                                            showCancelButton: true,
-                                            cancelButtonText: 'Close'
-            
-                                        })
-                                                 
-                                        document.getElementById('delete').onclick = () =>{
-                                            try {
-                                                fileexplorer.delete(element.getAttribute('path'));
-                                            } catch (error) {
-                                                alert(error)
-                                            }
-                                            document.getElementById("folder").removeChild(element);
-                                            swal.fire({
-                                                title: 'File Deleted',
-                                                text: `The file ${file} has been deleted`,
-                                                icon: 'success',
-                                                confirmButtonText: 'Ok'
-                                            });
-                                        }
-                                        document.getElementById('rename').onclick = () =>{
-                                            swal.fire({
-                                                title: 'Rename File',
-                                                html: `<input type="text" id="name" class="swal2-input" placeholder="name of the file">`,
-                                                confirmButtonText: 'Rename File',
-                                                focusConfirm: false,
-                                                preConfirm: () => {
-                                                    const file = Swal.getPopup().querySelector('#name').value
-                                                    return { file:file};
-                                                }
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    fileexplorer.rename(element.getAttribute('path'), path + '/' + result.value.file);
-                                                    element.innerHTML = result.value.file;
-                                                    element.id = result.value.file;
-                                                    element.setAttribute('path', path + '/' + result.value.file);
-                                                    swal.fire({
-                                                        title: 'File Renamed',
-                                                        text: `The file ${file} has been renamed to ${result.value.file}`,
-                                                        icon: 'success',
-                                                        confirmButtonText: 'Ok'
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    } 
-                                    
-                                }
+                            var li = document.createElement("p");
+                            li.innerHTML = `${file}`;
+                            function set_logo(file){
+                                if(file.endsWith('.html')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%" 
+                                    src="https://img.icons8.com/color/256/html-5.png"><p id="name">${file}</p>`;
+                                }else if(file.endsWith('.css')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%" 
+                                    src="https://img.icons8.com/color/256/css3.png"><p id="name">${file}</p>`;
+                                }else if(file.endsWith('.js')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/javascript.png"><p id="name">${file}</p>`;
                                 
+                                }else if(file.endsWith('.txt')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/notepad.png"><p id="name">${file}</p>`;
+                                }else if(file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.gif')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/image-file.png"><p id="name">${file}</p>`;
+                                }
+                                else if(file.endsWith('.cpp') || file.endsWith('.c') || file.endsWith('.h') || file.endsWith('.hpp')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/c-plus-plus-logo.png"><p id="name">${file}</p>`;
+                                }
+                                else if(file.endsWith('.py')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/python.png"><p id="name">${file}</p>`;
+                                } else if(file.endsWith('.php')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/php.png"><p id="name">${file}</p>`;
+                                } else if(file.endsWith('.java')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/java-coffee-cup-logo.png"><p id="name">${file}</p>`;
+                                } else if(file.endsWith('.exe')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/windows-10.png"><p id="name">${file}</p>`;
+                                }else if(file.endsWith('.md')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/markdown.png"><p id="name">${file}</p>`;
+                                }
+                                else if(file.endsWith('.json')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/external-tal-revivo-filled-tal-revivo/512/external-json-javascript-object-notation-is-a-lightweight-data-interchange-format-logo-filled-tal-revivo.png"><p id="name">${file}</p>`;
+                                }
+                                else if(file.endsWith('.jsx')){
+                                    li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                                    src="https://img.icons8.com/color/256/react-native.png"><p id="name">${file}</p>`;
+                                }
                             }
-                            if(document.getElementById("folder").contains(element)){
+                            li.id = file
+                            set_logo(file)
+                            
+                            li.addEventListener("click", function() {
+                    
+                                if (color === "grey") {
+                                   color = "lightgrey";
+                                  li.style.color = "#40a3fb"
+                                } else {
+                                  color = "white";
+                                  li.style.color = color;
+                                }
+                              });
+                              
+                              document.getElementById("folder").addEventListener("click", function(event) {
+                                if (!li.contains(event.target)) {
+                                  color = "grey";
+                                  
+                                  li.style.color = "white";
+                                }
+                              });
+
+                            li.setAttribute('path', path + '/' + file)
+                             li.onmouseup = (e) =>{
+                                if(e.button == 0){
+                                    fs.writeFileSync('./name.txt',path + '/' + file)
+                                    fileexplorer.open(path + '/' + file);
+                                }else if(e.button == 2){
+                                    fs.writeFileSync('./name.txt',folder + '/' + file)
+                                    swal.fire({
+                                       icon: 'question',
+                                       title: 'Options',
+                                       showConfirmButton: true,
+                                       confirmButtonText: 'Delete',
+                                       showDenyButton: true,
+                                       denyButtonText: 'Rename'
+                                   }).then((result) => {
+                                       //confirm
+                                       
+                                       if (result.isConfirmed) {
+                                           try {
+                                               fs.unlink(folder + '/' + file, (err) => {
+                                                   if (err) throw err;
+                                              
+                                               })
+           
+                                               document.getElementById("folder").removeChild(li)
+                                           } catch (error) {
+                                               swal.fire({
+                                                   icon: 'error',
+                                                   title: 'Error',
+                                                   text: error,
+                                               })
+                                           }
+                                           swal.fire({
+                                               icon: 'success',
+                                               title: 'File deleted',
+                                               showConfirmButton: false,
+                                               timer: 1500
+                                           })
+                                       } else if (result.isDenied) {
+                                           swal.fire({
+                                               icon: 'question',
+                                               title: 'Rename',
+                                               input: 'text',
+                                               inputLabel: 'New name',
+                                               showCancelButton: true,
+                                               confirmButtonText: 'Rename',
+                                               showLoaderOnConfirm: true,
+                                               preConfirm: (newname) => {
+                                                   fs.rename(folder + '/' + file, folder + '/' + newname, (err) => {
+                                                       if (err) throw err;
+                                                   })
+                                                   
+                                                   set_logo(newname);
+                                               }
+           
+                                           })
+                                            
+                                       }
+                                    })
+                                }
+                             }
+                                   
+                            if(document.getElementById("folder").contains(li)){
                                
                             }else{
                                 if(!document.getElementById(file)){
-                                    document.getElementById("folder").appendChild(element);
+                                    document.getElementById("folder").appendChild(li);
         
                                 }
                             }
@@ -212,32 +281,350 @@ var fileexplorer = {
 
 // creating a new file
 document.getElementById('createfile').onclick = () => {
-    Swal.fire({
-        title: 'Create File',
-        html: `<input type="text" id="name" class="swal2-input" placeholder="name of the file">
-        <input type="file" id="directory" class="swal2-input" webkitdirectory directory multiple="false" placeholder="Password">`,
-        confirmButtonText: 'Create File',
-        focusConfirm: false,
-        preConfirm: () => {
-            const file = Swal.getPopup().querySelector('#name').value
-            const directoryfirst = Swal.getPopup().querySelector('#directory').files[0].path
-            const directory = path.dirname(directoryfirst);
-            return { file:file, directory: directory };
-        }
-    }).then((result) => {
-        if (result.value) {
-            fileexplorer.create(result.value.directory, result.value.file);
-        }
-        Swal.fire({
-            title: 'File Created',
-            text: `The file ${result.value.file} has been created in ${result.value.directory}`,
-            icon: 'success',
-            confirmButtonText: 'Ok'
+   if(fs.existsSync('./folder.txt')){
+        let folder = fs.readFileSync('./folder.txt').toString();
+        swal.fire({
+            title: 'Create File',
+            html: `
+            
+            <input  type="text" id="name" class="swal2-input">`,
+            preConfirm: () => {
+                const name = Swal.getPopup().querySelector('#name').value
+                return { name: name};
+            }
+        }).then((result) => {
+            if(fs.existsSync(folder + '/' + result.value.name)){
+                swal.fire({
+                    title: 'Error',
+                    text: `The file ${result.value.name} already exists`,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }else{
+                fs.writeFileSync(folder + '/' + result.value.name, '')
+                swal.fire({
+                    title: 'File Created',
+                    text: `The file ${result.value.name} has been created`,
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                });
+                var li  = document.createElement('p');
+                li.setAttribute('id', result.value.name)
+                li.setAttribute('path', folder + '/' + result.value.name)
+                li.setAttribute('class', 'file')
+                li.innerHTML = result.value.name;
+                li.style.color = "white";
+                var file = result.value.name;
+                function set_logo(file){
+                  
+                        if(file.endsWith('.html')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%" 
+                            src="https://img.icons8.com/color/256/html-5.png"><p id="name">${file}</p>`;
+                        }else if(file.endsWith('.css')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%" 
+                            src="https://img.icons8.com/color/256/css3.png"><p id="name">${file}</p>`;
+                        }else if(file.endsWith('.js')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/javascript.png"><p id="name">${file}</p>`;
+                        }else if(file.endsWith('.json')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/json-file-format.png"><p id="name">${file}</p>`;
+                        }else if(file.endsWith('.txt')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/notepad.png"><p id="name">${file}</p>`;
+                        }else if(file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.gif')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/image-file.png"><p id="name">${file}</p>`;
+                        }
+                        else if(file.endsWith('.cpp') || file.endsWith('.c') || file.endsWith('.h') || file.endsWith('.hpp')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/c-plus-plus-logo.png"><p id="name">${file}</p>`;
+                        }
+                        else if(file.endsWith('.py')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/python.png"><p id="name">${file}</p>`;
+                        } else if(file.endsWith('.php')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/php.png"><p id="name">${file}</p>`;
+                        } else if(file.endsWith('.java')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/java-coffee-cup-logo.png"><p id="name">${file}</p>`;
+                        } else if(file.endsWith('.exe')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/windows-10.png"><p id="name">${file}</p>`;
+                        }else if(file.endsWith('.md')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/markdown.png"><p id="name">${file}</p>`;
+                        }else if(file.endsWith('.json')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/json-file-format.png"><p id="name">${file}</p>`;
+                        }
+                        else if(file.endsWith('.jsx')){
+                            li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                            src="https://img.icons8.com/color/256/react-native.png"><p id="name">${file}</p>`;
+                        }
+                     
+                }
+                
+                set_logo(file);
+                 
+                li.onmouseup = (e) =>{
+                    if(e.button == 0){
+                        fs.writeFileSync('./name.txt',folder + '/' + result.value.name)
+                        fileexplorer.open(folder + '/' + result.value.name);
+                         
+                         
+                    }else if(e.button == 2){
+                         
+                        
+                             fs.writeFileSync('./name.txt',folder + '/' + file)
+                             swal.fire({
+                                icon: 'question',
+                                title: 'Options',
+                                showConfirmButton: true,
+                                confirmButtonText: 'Delete',
+                                showDenyButton: true,
+                                denyButtonText: 'Rename'
+                            }).then((result) => {
+                                //confirm
+                                
+                                if (result.isConfirmed) {
+                                    try {
+                                        fs.unlink(folder + '/' + file, (err) => {
+                                            if (err) throw err;
+                                       
+                                        })
+    
+                                        document.getElementById("folder").removeChild(li)
+                                    } catch (error) {
+                                        swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: error,
+                                        })
+                                    }
+                                    swal.fire({
+                                        icon: 'success',
+                                        title: 'File deleted',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                } else if (result.isDenied) {
+                                    
+                                    li.querySelector('#name').contentEditable = true;
+                                    li.querySelector('#name').focus();
+                                    li.querySelector('#name').addEventListener('blur', () => {
+                                        var newname = li.querySelector('#name').textContent;
+                                        set_logo(newname);
+                                        fs.writeFileSync('./name.txt', folder + '/' + newname)
+                                        li.setAttribute('path', folder + '/' + newname)
+                                        fs.rename(folder + '/' + file, folder + '/' + newname, (err) => {
+                                            if (err) throw err;
+                                        });
+                                        
+                                    });
+                                     
+                                           
+                                   
+                                            
+                                   
+                                        
+    
+                                    
+                                     
+                                }
+                             })
+                         
+                    }
+                }
+                li.style.cursor = "pointer";
+                var color = "grey"
+                li.addEventListener("click", function() {
+                    
+                    if (color === "grey") {
+                       color = "lightgrey";
+                      li.style.color = "#40a3fb"
+                    } else {
+                      color = "white";
+                      li.style.color = color;
+                    }
+                  });
+                  
+                  document.getElementById("folder").addEventListener("click", function(event) {
+                    if (!li.contains(event.target)) {
+                      color = "grey";
+                      
+                      li.style.color = "white";
+                    }
+                  });
 
-        });
-    });
-};
+                if(!document.getElementById("folder").contains(li)){
+                    document.getElementById("folder").appendChild(li);
+                }
 
+            }
+        })
+
+   }else{
+       swal.fire({
+           title:'file name',
+              input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                showLoaderOnConfirm: true,
+                preConfirm: (name) => {
+                    return { name: name};
+                }
+         }).then((result) => {
+            var name = result.value.name
+            swal.fire({
+                title:'path to save',
+                html:`<input type="file" onchange="preventDefault()" class="swal2-input" id="folder"  webkitdirectory directory multiple="false"/>`,
+                showConfirmButton: true,
+                confirmButtonText: 'Save',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    const fileInput = Swal.getPopup().querySelector('#folder').files[0];
+                    let folderPath = fileInput.path.substring(0, fileInput.path.lastIndexOf("\\"));
+                    return { folderPath: folderPath };
+                }
+            }).then((result) => {
+                var folder = result.value.folderPath
+                var li = document.createElement("p");
+                li.setAttribute('path',folder + '/' + name)
+                li.innerText = name;
+                function set_logo(file){
+                  
+                    if(file.endsWith('.html')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%" 
+                        src="https://img.icons8.com/color/256/html-5.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.css')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%" 
+                        src="https://img.icons8.com/color/256/css3.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.js')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/javascript.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.json')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/json-file-format.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.txt')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/notepad.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.gif')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/image-file.png"><p id="name">${file}</p>`;
+                    }
+                    else if(file.endsWith('.cpp') || file.endsWith('.c') || file.endsWith('.h') || file.endsWith('.hpp')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/c-plus-plus-logo.png"><p id="name">${file}</p>`;
+                    }
+                    else if(file.endsWith('.py')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/python.png"><p id="name">${file}</p>`;
+                    } else if(file.endsWith('.php')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/php.png"><p id="name">${file}</p>`;
+                    } else if(file.endsWith('.java')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/java-coffee-cup-logo.png"><p id="name">${file}</p>`;
+                    } else if(file.endsWith('.exe')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/windows-10.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.md')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/markdown.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.json')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/json-file-format.png"><p id="name">${file}</p>`;
+                    }
+                    else if(file.endsWith('.jsx')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-35%"
+                        src="https://img.icons8.com/color/256/react-native.png"><p id="name">${file}</p>`;
+                    }
+                 
+                }
+                set_logo(name)
+                li.mousedown = (e) => {
+                    if(e.button == 0){
+                        fileexplorer.open(li.getAttribute('path'));
+                    }else if(e.button == 2){
+                        fs.writeFileSync('./name.txt',folder + '/' + name)
+                                    swal.fire({
+                                       icon: 'question',
+                                       title: 'Options',
+                                       showConfirmButton: true,
+                                       confirmButtonText: 'Delete',
+                                       showDenyButton: true,
+                                       denyButtonText: 'Rename'
+                                   }).then((result) => {
+                                       //confirm
+                                       
+                                       if (result.isConfirmed) {
+                                           try {
+                                               fs.unlink(folder + '/' + name, (err) => {
+                                                   if (err) throw err;
+                                              
+                                               })
+           
+                                               document.getElementById("folder").removeChild(li)
+                                           } catch (error) {
+                                               swal.fire({
+                                                   icon: 'error',
+                                                   title: 'Error',
+                                                   text: error,
+                                               })
+                                           }
+                                           swal.fire({
+                                               icon: 'success',
+                                               title: 'File deleted',
+                                               showConfirmButton: false,
+                                               timer: 1500
+                                           })
+                                       } else if (result.isDenied) {
+                                           swal.fire({
+                                               icon: 'question',
+                                               title: 'Rename',
+                                               input: 'text',
+                                               inputLabel: 'New name',
+                                               showCancelButton: true,
+                                               confirmButtonText: 'Rename',
+                                               showLoaderOnConfirm: true,
+                                               preConfirm: (newname) => {
+                                                   fs.rename(folder + '/' + name, folder + '/' + newname, (err) => {
+                                                       if (err) throw err;
+                                                   })
+                                                   
+                                                   set_logo(newname);
+                                               }
+           
+                                           })
+                                            
+                                       }
+                                    })
+                                
+                    }
+                }
+                if(!document.getElementById('folder').contains(li)){
+                    document.getElementById('folder').appendChild(li);
+                }
+                if(result.isConfirmed){
+                    fs.writeFileSync(folder + '/' + name, '')
+                    fs.writeFileSync('./name.txt',folder + '/' + name)
+                    fileexplorer.open(folder + '/' + name);
+                }
+            })
+           
+           
+         })
+       
+       
+       
+   }
+}
+        
 // opening files
 document.getElementById('openfile').onclick = () =>{
     swal.fire({
@@ -268,7 +655,9 @@ document.getElementById('openfile').onclick = () =>{
 document.getElementById('openfolder').onclick = () =>{
     swal.fire({
         title: 'Open Folder',
-        html: `<input type="file" id="name" class="swal2-input" webkitdirectory directory multiple="false">`,
+        html: `
+       
+        <input type="file" id="name" class="swal2-input" webkitdirectory directory multiple="false">`,
         preConfirm: () => {
             const file = Swal.getPopup().querySelector('#name').files[0].path
             return { file:file};
@@ -304,16 +693,146 @@ if(fs.existsSync('./folder.txt')){
             var files = fs.readdirSync(folder);
             files.forEach(file => {
                 var li = document.createElement('p');
-                li.innerHTML = file;
+                var color = "grey"
+                li.addEventListener("click", function() {
+                    
+                    if (color === "grey") {
+                       color = "lightgrey";
+                      li.style.color = "#40a3fb"
+                    } else {
+                      color = "white";
+                      li.style.color = color;
+                    }
+                  });
+                  
+                  document.getElementById("folder").addEventListener("click", function(event) {
+                    if (!li.contains(event.target)) {
+                      color = "grey";
+                      
+                      li.style.color = "white";
+                    }
+                  });
+                set_logo(file);
                 li.setAttribute('class', 'file');
                 li.setAttribute('id', file);
-                li.setAttribute('onclick', 'openfile(this.id)')
-                
+                function set_logo(file){
+                    if(file.endsWith('.html')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%" 
+                        src="https://img.icons8.com/color/256/html-5.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.css')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%" 
+                        src="https://img.icons8.com/color/256/css3.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.js')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/javascript.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.json')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/json-file-format.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.txt')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/notepad.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.gif')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/image-file.png"><p id="name">${file}</p>`;
+                    }
+                    else if(file.endsWith('.cpp') || file.endsWith('.c') || file.endsWith('.h') || file.endsWith('.hpp')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/c-plus-plus-logo.png"><p id="name">${file}</p>`;
+                    }
+                    else if(file.endsWith('.py')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/python.png"><p id="name">${file}</p>`;
+                    } else if(file.endsWith('.php')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/php.png"><p id="name">${file}</p>`;
+                    } else if(file.endsWith('.java')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/java-coffee-cup-logo.png"><p id="name">${file}</p>`;
+                    } else if(file.endsWith('.exe')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/windows-10.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.md')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/markdown.png"><p id="name">${file}</p>`;
+                    }else if(file.endsWith('.json')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/json-file-format.png"><p id="name">${file}</p>`;
+                    }
+                    else if(file.endsWith('.jsx')){
+                        li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
+                        src="https://img.icons8.com/color/256/react-native.png"><p id="name">${file}</p>`;
+                    }
+                }
                 document.getElementById('folder').appendChild(li);
-                li.onclick  = () =>{
-                    fileexplorer.open(folder + '/' + file);
-                    fs.writeFileSync('./name.txt',folder + '/' + file)
-                    fs.writeFileSync('./folder.txt', folder)
+                li.style.cursor = 'pointer';
+                li.setAttribute('path', folder + '/' + file)
+                fs.writeFileSync('./name.txt', li.getAttribute('path'))
+                li.onmousedown = (e) =>{
+                     
+                    if(e.button == 0){
+                        fileexplorer.open(li.getAttribute('path'));
+                        fs.writeFileSync('./name.txt', li.getAttribute('path'))
+                        fs.writeFileSync('./folder.txt', folder)
+                    }
+                    if(e.button == 2){
+                         fs.writeFileSync('./name.txt',folder + '/' + file)
+                         swal.fire({
+                            icon: 'question',
+                            title: 'Options',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Delete',
+                            showDenyButton: true,
+                            denyButtonText: 'Rename'
+                        }).then((result) => {
+                            //confirm
+                            
+                            if (result.isConfirmed) {
+                                try {
+                                    fs.unlink(folder + '/' + file, (err) => {
+                                        if (err) throw err;
+                                   
+                                    })
+
+                                    document.getElementById("folder").removeChild(li)
+                                } catch (error) {
+                                    swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: error,
+                                    })
+                                }
+                                swal.fire({
+                                    icon: 'success',
+                                    title: 'File deleted',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            } else if (result.isDenied) {
+                                
+                                li.querySelector('#name').contentEditable = true;
+                                li.querySelector('#name').focus();
+                                li.querySelector('#name').addEventListener('blur', () => {
+                                    var newname = li.querySelector('#name').textContent;
+                                    set_logo(newname);
+                                    fs.writeFileSync('./name.txt', folder + '/' + newname)
+                                    li.setAttribute('path', folder + '/' + newname)
+                                    fs.rename(folder + '/' + file, folder + '/' + newname, (err) => {
+                                        if (err) throw err;
+                                    });
+                                    
+                                });
+                                 
+                                       
+                               
+                                        
+                               
+                                    
+
+                                
+                                 
+                            }
+                         })
+                    }
                 }
             });
         } else if (result.isDenied) {

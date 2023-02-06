@@ -15,11 +15,11 @@ body{
  }
  #editor { 
     position: fixed;
-    top:10%;
+    top:10vh;
     font-size:20px;
     right: 0;
     bottom: 0;
-    left: 10%;
+    left: 9%;
     overflow:auto;
     text-align: start;
     border-radius:5px;
@@ -28,8 +28,8 @@ body{
 
 #sidebar{
     position: fixed;
-    left: 2%;
-    top:10%;
+    left: 1vw;
+    top:20%;
     overflow:auto;
     text-align: start
 }
@@ -44,7 +44,7 @@ body{
     position: fixed;
     top:0;
     right: 0;
-    left: 0;
+    left: 8%;
     background-color: #262627;
     color:white;
     padding: 10px;
@@ -66,12 +66,22 @@ body{
     color:white;
     cursor: pointer;
     padding: 10px;
+    font-weight:400;
     font-size: 20px;
-    background-color: #121212;
+    
     border-radius: 5px;
 }
 a{
     cursor:pointer;
 }
 
- 
+
+#folder{
+    position: absolute;
+    top:10%;
+}
+#icon {
+    position: absolute;
+    top:18%;
+    left:2%;
+}
