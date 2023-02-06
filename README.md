@@ -7,7 +7,7 @@ last edited: 2/5/23
 ```
 
 
-#About:
+# About:
 Monoco an extensible open source ide - created to be a one stop shop ide with tools that enhance programmers daily tasks.
 
 
