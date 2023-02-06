@@ -27,6 +27,7 @@
         <nav class="nav">
             <p style="display:none" contenteditable="" id="name"></p>
             <ul>
+                <li><img id="icon" src="https://user-images.githubusercontent.com/65188863/216860584-2c03afd7-2911-4d29-8e4d-0069d3e698b1.png" width="40"></li>
                 <li><a id="openfile" style="cursor:pointer">Open File</a></li>
                 <li><a id="openfolder">Open Folder</a></li>
                 <li><a id="createfile" style="cursor:pointer">create</a></li>
@@ -36,13 +37,11 @@
             </ul>
 
         </nav>
+        <span style="font-size:20px; position:fixed; top:3%; left:1.5%;">Explorer</span>
         <div id="folder">
-
+        
         </div>
-        <div id="editor" data-placeholder="Welcome to monoco editor"></div>
-    </div>
-    <div data-routeritem id="about" page:title="About" router-content="about">
-        <h1>About</h1>
+        <div id="editor"></div>
     </div>
     <div style="display:none" id="error" error:title="404">
         <h1>404 page not found</h1>
