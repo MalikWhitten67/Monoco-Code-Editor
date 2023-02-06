@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/stylesheets/index.css">
+    <span data-config style="display:none">
+        {
+        "routes":{
+        "home":{
+        "path":"#/?page=edit",
+        "content":"edit"
+        },
+        "about":{
+        "path":"#/?page=about",
+        "content":"about"
+        }
+        }
+        }
+    </span>
+</head>
+
+<body>
+    <div data-routeritem id="home" page:title="Edit File" router-content="edit">
+        <nav class="nav">
+            <p style="display:none" contenteditable="" id="name"></p>
+            <ul>
+                <li><a id="openfile" style="cursor:pointer">Open File</a></li>
+                <li><a id="openfolder">Open Folder</a></li>
+                <li><a id="createfile" style="cursor:pointer">create</a></li>
+                </li>
+                <li><a id="debug">Debug</a></li>
+
+            </ul>
+
+        </nav>
+        <div id="folder">
+
+        </div>
+        <div id="editor" data-placeholder="Welcome to monoco editor"></div>
+    </div>
+    <div data-routeritem id="about" page:title="About" router-content="about">
+        <h1>About</h1>
+    </div>
+    <div style="display:none" id="error" error:title="404">
+        <h1>404 page not found</h1>
+        <a href="#/?page=home">Go to home</a>
+    </div>
+    <script>
+        window.onload = () => {
+            window.location.hash = "#/?page=edit"
+        }
+
+
+    </script>
+    <!--Editor Imports-->
+    
+    <script src="https://unpkg.com/vrd-router"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.0/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.0/ext-language_tools.js"></script>
+    <script src="https://unpkg.com/sweetalert2@11.7.1/dist/sweetalert2.all.js"></script>
+    <script src="./src/core.js"></script>
+    <script src="./src/components/filesystem.js"></script>
+    <script src="./src/debugger.js"></script>
+    <script src="./src/components/discordpresence.js"></script>
+    <script>
+
+        var mode;
+        var path = nw.require('path');
+        var editor = ace.edit("editor");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true
+        });
+        editor.setTheme("ace/theme/monokai");
+        editor.setValue('open file to get started')
+        editor.session.setMode("ace/mode/text");
+
+        var os = nw.require('os');
+        var fs = nw.require('fs');
+        window.onkeydown = (e) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                var path = fs.readFileSync('./name.txt', 'utf8')
+                fs.writeFileSync(path, editor.getValue());
+
+            };
+        }
+        
+
+    </script>
+</body>
+
+</html>
