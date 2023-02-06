@@ -27,7 +27,7 @@ Monoco is built ontop of chromium which aids in the use of html webpage creation
 Monoco can show you in realtime what you are editing - the editor has an event listener that checks if you have edited the text on that file - then rewrite the popup windows html
 
 simple spa project to get you started:
-```
+```html
 <!Doctype html>
 <html>
  <head>
@@ -69,7 +69,7 @@ simple spa project to get you started:
 
 * python 
 
-```
+```python
 def my_function():
   print("Hello Monoco")
 
