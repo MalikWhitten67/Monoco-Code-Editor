@@ -2,12 +2,7 @@
 
 <img  width="70" src="https://user-images.githubusercontent.com/65188863/216860584-2c03afd7-2911-4d29-8e4d-0069d3e698b1.png">
 
-<style>
-body{
-   font-family:sans-serif;
-   font-size:calc(1vw + 10px);
-}
-</style>
+
 ```
 last edited: 2/5/23
 ```
