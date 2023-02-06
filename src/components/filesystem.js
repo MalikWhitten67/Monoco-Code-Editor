@@ -98,6 +98,8 @@ var fileexplorer = {
                         files.forEach((file, index) => {
                             var li = document.createElement("p");
                             li.innerHTML = `${file}`;
+                            li.style.width = "30%";
+                            li.style.textOverflow = "ellipsis";
                             function set_logo(file){
                                 if(file.endsWith('.html')){
                                     li.innerHTML = `<img width="20" style="position:absolute; left:-32%" 
@@ -741,30 +743,43 @@ if(fs.existsSync('./folder.txt')){
                     }
                     else if(file.endsWith('.py')){
                         li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
-                        src="https://img.icons8.com/color/256/python.png"><p id="name">${file}</p>`;
+                        src="https://img.icons8.com/color/256/python.png"><p style="max-width:10px; 
+                        white-space:no-wrap; text-overflow:hidden"  id="name">${file}</p>`;
                     } else if(file.endsWith('.php')){
                         li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
-                        src="https://img.icons8.com/color/256/php.png"><p id="name">${file}</p>`;
+                        src="https://img.icons8.com/color/256/php.png"><p style="max-width:10px; 
+                        white-space:no-wrap; text-overflow:hidden"  id="name">${file}</p>`;
                     } else if(file.endsWith('.java')){
                         li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
-                        src="https://img.icons8.com/color/256/java-coffee-cup-logo.png"><p id="name">${file}</p>`;
+                        src="https://img.icons8.com/color/256/java-coffee-cup-logo.png"><p style="max-width:10px; 
+                        white-space:no-wrap; text-overflow:hidden"  id="name">${file}</p>`;
                     } else if(file.endsWith('.exe')){
                         li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
-                        src="https://img.icons8.com/color/256/windows-10.png"><p id="name">${file}</p>`;
+                        src="https://img.icons8.com/color/256/windows-10.png"><p style="max-width:10px; 
+                        white-space:no-wrap; text-overflow:hidden"  id="name">${file}</p>`;
                     }else if(file.endsWith('.md')){
                         li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
-                        src="https://img.icons8.com/color/256/markdown.png"><p id="name">${file}</p>`;
+                        src="https://img.icons8.com/color/256/markdown.png"><p style="max-width:10px; 
+                        white-space:no-wrap; text-overflow:hidden" id="name">${file}</p>`;
                     }else if(file.endsWith('.json')){
                         li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
-                        src="https://img.icons8.com/color/256/json-file-format.png"><p id="name">${file}</p>`;
+                        src="https://img.icons8.com/color/256/json-file-format.png"><p style="max-width:10px; 
+                        white-space:no-wrap; text-overflow:hidden"  id="name">${file}</p>`;
                     }
                     else if(file.endsWith('.jsx')){
                         li.innerHTML = `<img width="20" style="position:absolute; left:-32%"
-                        src="https://img.icons8.com/color/256/react-native.png"><p id="name">${file}</p>`;
+                        src="https://img.icons8.com/color/256/react-native.png">
+                        <p style="max-width:10px; 
+                        white-space:no-wrap; text-overflow:hidden"id="name">${file}</p>`;
                     }
                 }
                 document.getElementById('folder').appendChild(li);
                 li.style.cursor = 'pointer';
+               
+                var el = document.getElementById("name")
+                el.style.maxWidth = "30%";
+                el.style.whiteSpace = "nowrap";
+                el.style.textOverflow = "ellipsis";
                 li.setAttribute('path', folder + '/' + file)
                 fs.writeFileSync('./name.txt', li.getAttribute('path'))
                 li.onmousedown = (e) =>{
