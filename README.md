@@ -20,7 +20,8 @@ Monoco is a extensible open source ide - created to be a one stop shop ide with 
 
 
 Simply click open file - open folder - or create to get started using monoco ->
-be sure that you have python, java, gcc / g++ installed to compoile code - out of the box markdown & html are precompiled.
+be sure that you have python, java, gcc / g++ installed to compile code 
+- out of the box markdown & html are precompiled.
 
 * HTML
 
@@ -67,6 +68,14 @@ simple spa project to get you started:
  </body>
 </html>
 ```
+
+Just like html - monoco's markdown parser parses 
+in real time as you edit allowing you to see what you are building
+Right before your very eyes
+```md
+# hello monoco
+```
+
 
 * python  - compile python code right from your editor
 
